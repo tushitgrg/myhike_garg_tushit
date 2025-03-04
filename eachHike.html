@@ -40,22 +40,6 @@
 </head>
 
 <body>
-    <!-- Templates for general use, not displayed -->
-<template id="hikeCardTemplate">
-    <div class="card py-2 mx-2" style="width: 18rem">
-        <img class="card-image card-img-top" src=" ..." alt="..." />
-        <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-length">placeholder</p>
-            <br />
-            <p class="card-text">
-                Some quick example text to build on the card title and make up the
-                bulk of the card's content.
-            </p>
-            <a class="btn btn-primary card-href">Read more ...</a>
-        </div>
-    </div>
-</template>
     <!------------------------------>
     <!-- Your HTML Layout go here -->
     <!------------------------------>
@@ -64,25 +48,12 @@
     <nav id="navbarPlaceholder"></nav>
 
     <!-- the body of your page goes here -->
-    <div class="container-fluid bg-light text-dark p-5">
-        <div class="container bg-light p-5">
-            <h1>You are now Logged in!</h1>
-            <h1 class="display-4">Hey <span id="name-goes-here"></span> Welcome to Tushit Hikes</h1>
-            <hr>
-           
-            <span id="quote-goes-here"></span>
-         
-        </div>
-        <div class="container"> 
-            <h1>Some popular hikes</h1>
-            <!-- Here is the container for cards  -->
-            <div class="container">
-                <div id="hikes-go-here" class="row row-cols-auto">
-                </div>
-            </div>
-    </div>
-</div>
     <!-- stuff -->
+    <div class="container">
+        <h1><span id="hikeName"> this hike</span></h1>
+        <img class="hike-img responsive" src=""/>
+        <div id="details-go-here"></div>
+  </div>
 
     <!-- our own footer goes here-->
     <nav id="footerPlaceholder"></nav>
@@ -92,9 +63,32 @@
     <!---------------------------------------------->
     <script src="./scripts/firebaseAPI_TEAM99.js"></script>
     <script src="./scripts/skeleton.js"></script>
+    <script>
+        function displayHikeInfo() {
+    let params = new URL( window.location.href ); //get URL of search bar
+    let ID = params.searchParams.get( "docID" ); //get value for key "id"
+    console.log( ID );
 
-    <script src="./scripts/script.js"></script>
-    <script src="./scripts/main.js"></script>
+    // doublecheck: is your collection called "Reviews" or "reviews"?
+    // spelling matters
+    db.collection( "hikes" )
+        .doc( ID )
+        .get()
+        .then( doc => {
+            thisHike = doc.data();
+            hikeCode = thisHike.code;
+            hikeName = doc.data().name;
+            
+            // only populate title, and image
+            document.getElementById( "hikeName" ).innerHTML = hikeName;
+            let imgEvent = document.querySelector( ".hike-img" );
+            imgEvent.src = "../images/" + hikeCode + ".jpg";
+        } );
+}
+displayHikeInfo();
+
+    </script>
+    <!-- <script src="./scripts/script.js"></script> -->
 
 </body>
 
